@@ -58,11 +58,9 @@ func main() {
 
 	cc := []string{"tralalala@gmail.com"}
 	to := []string{}
-	for i := 0; i < informasi.JumlahAnak; i++ {
-		email := controllers.GenerateEmail(informasi.KodeJurusan, informasi.Angkatan, informasi.Absen+i)
-		fmt.Println(email)
-		to = append(to, email)
-	}
+	go controllers.EvenEmail(to, informasi)
+	go controllers.OddEmail(to, informasi)
+	time.Sleep(3000 * time.Millisecond)
 
 	var email string
 	var password string
