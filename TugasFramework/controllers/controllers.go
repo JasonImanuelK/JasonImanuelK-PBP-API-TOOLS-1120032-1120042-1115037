@@ -5,6 +5,7 @@ import (
 	"net/smtp"
 	"strconv"
 	"strings"
+	"time"
 
 	model "TugasFramework/model"
 )
@@ -37,7 +38,7 @@ func SendMail(to []string, cc []string, subject, message string, email string, p
 }
 
 func generateEmail(jurusan string, angkatan int, absen int) string {
-	email := jurusan + strconv.Itoa(angkatan)
+	email := jurusan + "-" + strconv.Itoa(angkatan)
 	if absen/10 < 0 {
 		email = email + "00"
 	} else {
@@ -52,6 +53,7 @@ func EvenEmail(to []string, informasi model.Informasi) {
 		email := generateEmail(informasi.KodeJurusan, informasi.Angkatan, informasi.Absen+i)
 		fmt.Println(email)
 		to = append(to, email)
+		time.Sleep(250 * time.Millisecond)
 	}
 }
 
@@ -60,5 +62,6 @@ func OddEmail(to []string, informasi model.Informasi) {
 		email := generateEmail(informasi.KodeJurusan, informasi.Angkatan, informasi.Absen+i)
 		fmt.Println(email)
 		to = append(to, email)
+		time.Sleep(400 * time.Millisecond)
 	}
 }
