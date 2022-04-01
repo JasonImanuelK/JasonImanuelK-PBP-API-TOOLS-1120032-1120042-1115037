@@ -9,7 +9,6 @@ import (
 
 const CONFIG_SMTP_HOST = "smtp.gmail.com"
 const CONFIG_SMTP_PORT = 587
-const CONFIG_SENDER_NAME = "Lecoq <jms.jordab@gmail.com>"
 
 func GenerateSender(nama string, email string) string {
 	var hasil string
@@ -18,7 +17,7 @@ func GenerateSender(nama string, email string) string {
 }
 
 func SendMail(to []string, cc []string, subject, message string, email string, password string, sender string) error {
-	body := "From: " + CONFIG_SENDER_NAME + "\n" +
+	body := "From: " + sender + "\n" +
 		"To: " + strings.Join(to, ",") + "\n" +
 		"Cc: " + strings.Join(cc, ",") + "\n" +
 		"Subject: " + subject + "\n\n" +
