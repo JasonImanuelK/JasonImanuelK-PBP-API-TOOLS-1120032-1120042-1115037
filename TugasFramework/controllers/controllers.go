@@ -5,6 +5,8 @@ import (
 	"net/smtp"
 	"strconv"
 	"strings"
+
+	model "TugasFramework/model"
 )
 
 const CONFIG_SMTP_HOST = "smtp.gmail.com"
@@ -34,7 +36,7 @@ func SendMail(to []string, cc []string, subject, message string, email string, p
 	return nil
 }
 
-func GenerateEmail(jurusan string, angkatan int, absen int) string {
+func generateEmail(jurusan string, angkatan int, absen int) string {
 	email := jurusan + strconv.Itoa(angkatan)
 	if absen/10 < 0 {
 		email = email + "00"
@@ -43,4 +45,20 @@ func GenerateEmail(jurusan string, angkatan int, absen int) string {
 	}
 	email = email + strconv.Itoa(absen) + "@students.ithb.ac.id"
 	return email
+}
+
+func EvenEmail(to []string, informasi model.Informasi) {
+	for i := 0; i < informasi.JumlahAnak; i = i + 2 {
+		email := generateEmail(informasi.KodeJurusan, informasi.Angkatan, informasi.Absen+i)
+		fmt.Println(email)
+		to = append(to, email)
+	}
+}
+
+func OddEmail(to []string, informasi model.Informasi) {
+	for i := 1; i < informasi.JumlahAnak; i = i + 2 {
+		email := generateEmail(informasi.KodeJurusan, informasi.Angkatan, informasi.Absen+i)
+		fmt.Println(email)
+		to = append(to, email)
+	}
 }

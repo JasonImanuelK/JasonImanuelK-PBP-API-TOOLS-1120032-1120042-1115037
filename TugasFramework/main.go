@@ -5,6 +5,7 @@ import (
 	model "TugasFramework/model"
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/go-co-op/gocron"
@@ -48,6 +49,7 @@ func main() {
 			var absenAkhir int
 			fmt.Scanln(&absenAkhir)
 			jumlahAnak = absenAkhir - absen
+
 		}
 		var informasi = model.Informasi{KodeJurusan: kode, Angkatan: angkatan, Absen: absen, JumlahAnak: jumlahAnak}
 
@@ -61,22 +63,25 @@ func main() {
 
 		cc := []string{"tralalala@gmail.com"}
 		to := []string{}
-		for i := 0; i < informasi.JumlahAnak; i++ {
-			email := controllers.GenerateEmail(informasi.KodeJurusan, informasi.Angkatan, informasi.Absen+i)
-			fmt.Println(email)
-			to = append(to, email)
+		go controllers.EvenEmail(to, informasi)
+		if input != 1 {
+			go controllers.OddEmail(to, informasi)
 		}
 
+		time.Sleep(3000 * time.Millisecond)
 		var email string
 		var password string
 		email, err := client.Get(ctx, "email").Result()
 		password, err1 := client.Get(ctx, "password").Result()
 		if err1 != nil || err != nil {
+			//err1.Error()
+			log.Print(err.Error())
+
 			fmt.Print("email: ")
 			fmt.Scanln(&email)
 			fmt.Print("password: ")
 			fmt.Scanln(&password)
-			err := client.Set(ctx, "key", "value", 0).Err()
+			err := client.Set(ctx, "email", email, 0).Err()
 			if err != nil {
 				fmt.Println(err)
 			}
